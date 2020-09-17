@@ -14,13 +14,9 @@ module.exports = {
         host: '0.0.0.0',
         port: port,
         proxy: {
-          [process.env.VUE_APP_BASE_API]: {
-            target: `http://localhost:8080`,
-            //是否改变源地址
-            changeOrigin: true,
-            pathRewrite: {
-              ['^' + process.env.VUE_APP_BASE_API]: ''
-            }
+          '/': {
+            target: 'http://localhost:8080',
+            changeOrigin: true
           }
         }
     },
