@@ -28,11 +28,27 @@ public class SysLoginController
     /**
      * 登录方法
      * 
-     * @param loginBody 登录信息
+     * @param loginBody 用户名密码
      * @return 结果
      */
     @RequestMapping("/login")
     public AjaxResult login(String username,String password)
+    {
+        AjaxResult ajax = AjaxResult.success();
+        String token = IdUtils.randomUUID();
+        ajax.put("token", token);
+        
+        return ajax;
+    }
+    
+    /**
+     * 验证码获取
+     * 
+     * @param captchaImage 登录信息
+     * @return 结果
+     */
+    @RequestMapping("/captchaImage")
+    public AjaxResult captchaImage(String username,String password)
     {
         AjaxResult ajax = AjaxResult.success();
         String token = IdUtils.randomUUID();
@@ -94,18 +110,27 @@ public class SysLoginController
     	
     	List<Map<String, Object>> children = new ArrayList<Map<String, Object>>();
     	
-    	Map<String, Object> childrenmenu = new HashMap<String, Object>();
-    	childrenmenu.put("name", "User");
-    	childrenmenu.put("path", "/system");
-    	childrenmenu.put("hidden", false);
-    	childrenmenu.put("component", "system/user/index");
+    	Map<String, Object> menuUser = new HashMap<String, Object>();
+    	menuUser.put("name", "User");
+    	menuUser.put("path", "/user");
+    	menuUser.put("hidden", false);
+    	menuUser.put("component", "system/user/index");
     	Map<String, Object> metaUser = new HashMap<String, Object>();
     	metaUser.put("title", "用户管理");
     	metaUser.put("icon", "user");
+    	menuUser.put("meta", metaUser);
+    	children.add(menuUser);
     	
-    	childrenmenu.put("meta", metaUser);
-    	
-    	children.add(childrenmenu);
+    	Map<String, Object> menuRole = new HashMap<String, Object>();
+    	menuRole.put("name", "Role");
+    	menuRole.put("path", "/role");
+    	menuRole.put("hidden", false);
+    	menuRole.put("component", "system/role/index");
+    	Map<String, Object> metaRole = new HashMap<String, Object>();
+    	metaRole.put("title", "角色管理");
+    	metaRole.put("icon", "peoples");
+    	menuRole.put("meta", metaRole);
+    	children.add(menuRole);
     	
     	Map<String, Object> metaSystem = new HashMap<String, Object>();
     	metaSystem.put("title", "系统管理");

@@ -26,3 +26,17 @@ Mock.mock('/login', 'post', (data) => {
 Mock.mock('/getInfo', 'get', require('./json/userInfo'));
 Mock.mock('/logout', 'post', require('./json/userInfo'));
 Mock.mock('/getRouters', 'get', require('./json/menu'));
+Mock.mock('/system/role/list', 'get', (data)=>{
+    console.log(data)
+    return require('./json/roleInfo')
+  }
+);
+Mock.mock('/system/role', 'post', (data)=>{
+  console.log('角色新增 data：'+JSON.stringify(data))
+  return require('./json/roleInfo')
+}
+);
+Mock.mock(RegExp('/system/role' + '.*'), 'get', require('./json/roleInfo'));
+
+
+

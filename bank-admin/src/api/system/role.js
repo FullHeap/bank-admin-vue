@@ -2,6 +2,7 @@ import request from '@/utils/request'
 
 // 查询角色列表
 export function listRole(query) {
+  //console.log('11111111');
   return request({
     url: '/system/role/list',
     method: 'get',
@@ -19,6 +20,8 @@ export function getRole(roleId) {
 
 // 新增角色
 export function addRole(data) {
+  // debugger;
+  console.log('data:'+JSON.stringify(data));
   return request({
     url: '/system/role',
     method: 'post',

@@ -31,6 +31,25 @@ import permission from './directive/permission'
 import './permission' // permission control
 Vue.use(permission)
 
+
+import { parseTime, resetForm, addDateRange } from "@/utils/index";
+Vue.prototype.addDateRange = addDateRange
+Vue.prototype.parseTime = parseTime
+Vue.prototype.resetForm = resetForm
+
+//全局弹出框
+Vue.prototype.msgSuccess = function (msg) {
+  this.$message({ showClose: true, message: msg, type: "success" });
+}
+
+Vue.prototype.msgError = function (msg) {
+  this.$message({ showClose: true, message: msg, type: "error" });
+}
+
+Vue.prototype.msgInfo = function (msg) {
+  this.$message.info(msg);
+}
+
 Vue.config.productionTip = false
 
 new Vue({

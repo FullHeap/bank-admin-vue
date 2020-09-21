@@ -11,6 +11,7 @@ NProgress.configure({ showSpinner: false })
 const whiteList = ['/login', '/auth-redirect', '/bind', '/register']
 
 router.beforeEach((to, from, next) => {
+  //debugger
   NProgress.start()
   if (getToken()) {
     /* has token*/
@@ -42,13 +43,6 @@ router.beforeEach((to, from, next) => {
           })
       } else {
         next()
-        // 没有动态改变权限的需求可直接next() 删除下方权限判断 ↓
-        // if (hasPermission(store.getters.roles, to.meta.roles)) {
-        //   next()
-        // } else {
-        //   next({ path: '/401', replace: true, query: { noGoBack: true }})
-        // }
-        // 可删 ↑
       }
     }
   } else {

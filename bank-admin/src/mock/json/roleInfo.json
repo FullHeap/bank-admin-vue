@@ -1,0 +1,33 @@
+{
+	"total": 2,
+	"rows": [
+    {
+		"createTime": "2018-03-16 11:33:00",
+		"remark": "超级管理员",
+		"params": {},
+		"roleId": 1,
+		"roleName": "超级管理员",
+		"roleKey": "admin",
+		"roleSort": "1",
+		"dataScope": "1",
+		"status": "0",
+		"delFlag": "0",
+		"flag": false,
+		"admin": true
+	}, {
+		"createTime": "2018-03-16 11:33:00",
+		"remark": "普通角色",
+		"params": {},
+		"roleId": 2,
+		"roleName": "普通角色",
+		"roleKey": "common",
+		"roleSort": "2",
+		"dataScope": "2",
+		"status": "0",
+		"delFlag": "0",
+		"flag": false,
+		"admin": false
+	}],
+	"code": 200,
+	"msg": "查询成功"
+}

@@ -330,7 +330,7 @@
 <script>
 import { listUser, getUser, delUser, addUser, updateUser, exportUser, resetUserPwd, changeUserStatus, importTemplate } from "@/api/system/user";
 import { getToken } from "@/utils/auth";
-import { treeselect } from "@/api/system/dept";
+//import { treeselect } from "@/api/system/dept";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -466,9 +466,9 @@ export default {
     },
     /** 查询部门下拉树结构 */
     getTreeselect() {
-      treeselect().then(response => {
+      /* treeselect().then(response => {
         this.deptOptions = response.data;
-      });
+      }); */
     },
     // 筛选节点
     filterNode(value, data) {
