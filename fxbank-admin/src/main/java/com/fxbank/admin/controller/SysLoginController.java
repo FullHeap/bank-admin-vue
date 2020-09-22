@@ -81,12 +81,19 @@ public class SysLoginController
     	user.put("email", "liaoyinzhen@agree.com");
     	user.put("sex", "1");
     	user.put("password", "123");
+    	user.put("avatar", "");
     	user.put("roles", role);
     	
         AjaxResult ajax = AjaxResult.success();
+        
+        Set<String> permissions = new HashSet<String>();
+        permissions.add("*:*:*");
+        
+        Set<String> roleadmin = new HashSet<String>();
+        roleadmin.add("admin");
         ajax.put("user", user);
-        ajax.put("roles", "admin");
-        ajax.put("permissions", "*:*:*");
+        ajax.put("roles", roleadmin);
+        ajax.put("permissions", permissions);
         return ajax;
     }
 
