@@ -129,13 +129,13 @@
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:role:edit']"
           >修改</el-button>
-          <el-button
+          <!-- <el-button
             size="mini"
             type="text"
             icon="el-icon-circle-check"
             @click="handleDataScope(scope.row)"
             v-hasPermi="['system:role:edit']"
-          >数据权限</el-button>
+          >数据权限</el-button> -->
           <el-button
             size="mini"
             type="text"
@@ -162,6 +162,16 @@
         <el-form-item label="备注">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
         </el-form-item>
+        <el-form-item label="菜单权限">
+          <el-tree
+            :data="menuOptions"
+            show-checkbox
+            ref="menu"
+            node-key="id"
+            empty-text="加载中，请稍后"
+            :props="defaultProps"
+          ></el-tree>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -170,7 +180,7 @@
     </el-dialog>
 
     <!-- 分配角色数据权限对话框 -->
-    <el-dialog :title="title" :visible.sync="openDataScope" width="500px" append-to-body>
+    <!-- <el-dialog :title="title" :visible.sync="openDataScope" width="500px" append-to-body>
       <el-form :model="form" label-width="80px">
         <el-form-item label="角色名称">
           <el-input v-model="form.roleName" :disabled="true" />
@@ -204,12 +214,13 @@
         <el-button type="primary" @click="submitDataScope">确 定</el-button>
         <el-button @click="cancelDataScope">取 消</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
 <script>
 import { listRole, getRole, delRole, addRole, updateRole, exportRole, dataScope, changeRoleStatus } from "@/api/system/role";
+import { treeselect as menuTreeselect, roleMenuTreeselect } from "@/api/system/menu";
 
 export default {
   name: "Role",
@@ -356,22 +367,45 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      // this.getMenuTreeselect();
+      this.getMenuTreeselect();
       this.open = true;
       this.title = "添加角色";
+    },
+     /** 查询菜单树结构 */
+    getMenuTreeselect() {
+      menuTreeselect().then(response => {
+        this.menuOptions = response.data;
+      });
+    },
+    /** 根据角色ID查询菜单树结构 */
+    getRoleMenuTreeselect(roleId) {
+      return roleMenuTreeselect(roleId).then(response => {
+        this.menuOptions = response.menus;
+        return response;
+      });
+    },
+    // 所有菜单节点数据
+    getMenuAllCheckedKeys() {
+      // 目前被选中的菜单节点
+      let checkedKeys = this.$refs.menu.getHalfCheckedKeys();
+      // 半选中的菜单节点
+      let halfCheckedKeys = this.$refs.menu.getCheckedKeys();
+      checkedKeys.unshift.apply(checkedKeys, halfCheckedKeys);
+      return checkedKeys;
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const roleId = row.roleId || this.ids
       getRole(roleId).then(response => {
+        console.log(response.data);
         this.form = response.data;
         this.open = true;
         this.title = "修改角色";
       });
     },
     /** 分配数据权限操作 */
-    handleDataScope(row) {
+    /* handleDataScope(row) {
       this.reset();
       this.$nextTick(() => {
         this.getRoleDeptTreeselect(row.roleId);
@@ -381,13 +415,13 @@ export default {
         this.openDataScope = true;
         this.title = "分配数据权限";
       });
-    },
+    }, */
     /** 提交按钮 */
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.roleId != undefined) {
-            // this.form.menuIds = this.getMenuAllCheckedKeys();
+            this.form.menuIds = this.getMenuAllCheckedKeys();
             updateRole(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
@@ -396,7 +430,7 @@ export default {
               }
             });
           } else {
-            // this.form.menuIds = this.getMenuAllCheckedKeys();
+            this.form.menuIds = this.getMenuAllCheckedKeys();
             addRole(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
@@ -409,7 +443,7 @@ export default {
       });
     },
     /** 提交按钮（数据权限） */
-    submitDataScope: function() {
+   /*  submitDataScope: function() {
       if (this.form.roleId != undefined) {
         this.form.deptIds = this.getDeptAllCheckedKeys();
         dataScope(this.form).then(response => {
@@ -420,7 +454,7 @@ export default {
           }
         });
       }
-    },
+    }, */
     /** 删除按钮操作 */
     handleDelete(row) {
       const roleIds = row.roleId || this.ids;

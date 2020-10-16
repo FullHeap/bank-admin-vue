@@ -24,18 +24,26 @@ Vue.use(ElementUI, {
 import './assets/icons'
 
 //mock测试引入
-//import './mock/mock.js'
+import './mock/mock.js'
 
 //用户权限管理
 import permission from './directive/permission'
 import './permission' // permission control
 Vue.use(permission)
 
+//查找和刷新按钮组件
+import RightToolbar from "@/components/RightToolbar";
+//分页组件
+import Pagination from "@/components/Pagination";
 
-import { parseTime, resetForm, addDateRange } from "@/utils/index";
+
+
+import { parseTime, resetForm, addDateRange, handleTree } from "@/utils/index";
 Vue.prototype.addDateRange = addDateRange
 Vue.prototype.parseTime = parseTime
 Vue.prototype.resetForm = resetForm
+//菜单解析
+Vue.prototype.handleTree = handleTree
 
 //全局弹出框
 Vue.prototype.msgSuccess = function (msg) {
@@ -49,6 +57,9 @@ Vue.prototype.msgError = function (msg) {
 Vue.prototype.msgInfo = function (msg) {
   this.$message.info(msg);
 }
+//全局组件
+Vue.component('RightToolbar', RightToolbar)
+Vue.component('Pagination', Pagination)
 
 Vue.config.productionTip = false
 

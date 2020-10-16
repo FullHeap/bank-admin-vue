@@ -35,6 +35,16 @@
                     }
                 },
                 {
+                    "name": "Test",
+                    "path": "test",
+                    "hidden": false,
+                    "component": "system/test/index",
+                    "meta": {
+                        "title": "组件测试",
+                        "icon": "user"
+                    }
+                },
+                {
                     "name": "Menu",
                     "path": "menu",
                     "hidden": false,

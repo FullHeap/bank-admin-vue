@@ -29,14 +29,34 @@ Mock.mock('/getRouters', 'get', require('./json/menu'));
 Mock.mock('/system/role/list', 'get', (data)=>{
     console.log(data)
     return require('./json/roleInfo')
-  }
-);
+});
+Mock.mock('/system/role/list', 'get', (data)=>{
+  console.log(data)
+  return require('./json/roleInfo')
+});
 Mock.mock('/system/role', 'post', (data)=>{
   console.log('角色新增 data：'+JSON.stringify(data))
   return require('./json/roleInfo')
-}
-);
+});
+Mock.mock('/system/role/1', 'get', (data)=>{
+  console.log('data：'+JSON.stringify(data))
+  return require('./json/roleAdmin')
+});
 Mock.mock(RegExp('/system/role' + '.*'), 'get', require('./json/roleInfo'));
 
+Mock.mock('/system/menu/list', 'get', (data)=>{
+  console.log('菜单data：'+JSON.stringify(data))
+  return require('./json/menuInfo')
+});
+
+Mock.mock('/system/menu', 'post', (data)=>{
+  console.log('菜单新增data：'+JSON.stringify(data))
+  return require('./json/menuInfo')
+});
+
+Mock.mock('/system/menu/treeselect', 'get', (data)=>{
+  console.log('菜单data：'+JSON.stringify(data))
+  return require('./json/menuTree')
+});
 
 

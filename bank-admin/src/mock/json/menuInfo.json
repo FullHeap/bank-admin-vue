@@ -1,0 +1,64 @@
+{
+    "msg": "操作成功",
+    "code": 200,
+    "data": [
+        {
+            "createTime": "2018-03-16 11:33:00",       
+            "menuId": 1,
+            "menuName": "系统管理",
+            "parentId": 0,
+            "orderNum": "1",
+            "path": "system",
+            "isFrame": "1",
+            "menuType": "M",
+            "visible": "0",
+            "status": "0",
+            "icon": "system"
+        },
+        {
+            "createTime": "2018-03-16 11:33:00",        
+            "menuId": 100,
+            "menuName": "用户管理",
+            "parentId": 1,
+            "orderNum": "1",
+            "path": "user",
+            "component": "system/user/index",
+            "isFrame": "1",
+            "menuType": "C",
+            "visible": "0",
+            "status": "0",
+            "perms": "system:user:list",
+            "icon": "user"
+        },
+        {      
+            "createTime": "2018-03-16 11:33:00",
+            "menuId": 101,
+            "menuName": "角色管理",
+            "parentId": 1,
+            "orderNum": "2",
+            "path": "role",
+            "component": "system/role/index",
+            "isFrame": "1",
+            "menuType": "C",
+            "visible": "0",
+            "status": "0",
+            "perms": "system:role:list",
+            "icon": "peoples"
+        },
+        {
+            "createTime": "2018-03-16 11:33:00",         
+            "menuId": 102,
+            "menuName": "菜单管理",
+            "parentId": 1,
+            "orderNum": "3",
+            "path": "menu",
+            "component": "system/menu/index",
+            "isFrame": "1",
+            "menuType": "C",
+            "visible": "0",
+            "status": "0",
+            "perms": "system:menu:list",
+            "icon": "tree-table"
+        }
+    ]
+}
