@@ -54,9 +54,14 @@ Mock.mock('/system/menu', 'post', (data)=>{
   return require('./json/menuInfo')
 });
 
-Mock.mock('/system/menu/treeselect', 'get', (data)=>{
+/* Mock.mock('/system/menu/treeselect', 'get', (data)=>{
   console.log('菜单data：'+JSON.stringify(data))
   return require('./json/menuTree')
+}); */
+
+Mock.mock('/system/menu/treeselect', 'get', (data)=>{
+  console.log('菜单data：'+JSON.stringify(data))
+  return require('./json/menuTransfer')
 });
 
 
