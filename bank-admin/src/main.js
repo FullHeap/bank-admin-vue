@@ -16,9 +16,9 @@ import './assets/styles/element-variables.scss'
 import '@/assets/styles/index.scss' // global css
 import '@/assets/styles/base.scss' // base css
 
-import WlTreeTransfer from 'wl-tree-transfer' 
+/* import WlTreeTransfer from 'wl-tree-transfer' 
 import 'wl-tree-transfer/lib/wl-tree-transfer.css' 
-Vue.use(WlTreeTransfer)
+Vue.use(WlTreeTransfer) */
 
 Vue.use(ElementUI, {
   size: 'small'

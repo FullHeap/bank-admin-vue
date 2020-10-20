@@ -208,7 +208,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="菜单权限">
-          <wl-tree-transfer
+          <tree-transfer
             :title="titleTransfer"
             ref="menu"
             :from_data="fromData"
@@ -221,7 +221,7 @@
             filter
             openAll
           >
-          </wl-tree-transfer>
+          </tree-transfer>
 
           <!-- <el-tree
             :data="menuOptions"
@@ -257,9 +257,11 @@ import {
   treeselect as menuTreeselect,
   roleMenuTreeselect
 } from "@/api/system/menu";
+import treeTransfer from "@/components/TreeTransfer/";
 
 export default {
   name: "Role",
+  components:{ treeTransfer },
   data() {
     return {
       // 遮罩层
