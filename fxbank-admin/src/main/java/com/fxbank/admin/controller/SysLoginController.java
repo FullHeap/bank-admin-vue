@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,8 @@ import com.fxbank.admin.util.IdUtils;
  * 登录验证
  * 
  */
+
+//@CrossOrigin(origins = "http://ruoyi.vip", maxAge = 3600)
 @RestController
 public class SysLoginController
 {

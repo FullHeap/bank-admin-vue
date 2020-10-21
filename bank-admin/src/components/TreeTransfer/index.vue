@@ -298,7 +298,8 @@
 </template>
 
 <script>
-import { arrayToTree } from "./array.js";
+import { arrayToTree } from "../../utils/array";
+
 export default {
   name: 'tree-transfer',
   data() {
