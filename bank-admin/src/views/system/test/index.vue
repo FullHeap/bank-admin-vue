@@ -7,6 +7,7 @@
       :defaultProps="{ label: 'label' }"
       @addBtn="add"
       @removeBtn="remove"
+      :button_text="button_text"
       :mode="mode"
       height="540px"
       filter
@@ -17,7 +18,9 @@
 </template>
 
 <script>
+import wlTreeTransfer from "@/components/TreeTransfer/";
 export default {
+  components:{ wlTreeTransfer },
   data() {
     return {
       mode: "transfer", // transfer addressList
@@ -32,7 +35,7 @@ export default {
               id: "1-1",
               pid: "1",
               label: "二级 1-1",
-              disabled: true,
+              //disabled: true,
               children: []
             },
             {
@@ -57,7 +60,8 @@ export default {
           ]
         }
       ],
-      toData: []
+      toData: [],
+      button_text:["添加","删除"]
     };
   },
   methods: {

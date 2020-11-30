@@ -20,6 +20,7 @@ const permission = {
       return new Promise(resolve => {
         // 向后端请求路由数据
         getRouters().then(res => {
+          console.log("resdata:"+JSON.stringify(res.data))
           const accessedRoutes = filterAsyncRouter(res.data)
           accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
           commit('SET_ROUTES', accessedRoutes)
@@ -31,8 +32,9 @@ const permission = {
 }
 
 // 遍历后台传来的路由字符串，转换为组件对象
-function filterAsyncRouter(asyncRouterMap) {
+export function filterAsyncRouter(asyncRouterMap) {
   return asyncRouterMap.filter(route => {
+    console.log("resdata111:"+JSON.stringify(route))
     if (route.component) {
       // Layout组件特殊处理
       if (route.component === 'Layout') {

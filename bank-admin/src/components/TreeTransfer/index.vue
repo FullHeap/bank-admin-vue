@@ -3,6 +3,7 @@
     <template v-if="mode == 'transfer'">
       <!-- 左侧穿梭框 原料框 -->
       <div class="transfer-left">
+        <!-- 左侧标题 -->
         <h3 class="transfer-title">
           <el-checkbox
             :indeterminate="from_is_indeterminate"
@@ -10,11 +11,13 @@
             @change="fromAllBoxChange"
           ></el-checkbox>
           <span>{{ fromTitle }}</span>
+          <!-- 左侧标题预留 -->
           <slot name="title-left"></slot>
         </h3>
-        <!-- 内容区 -->
+        <!-- 左侧内容区 -->
         <div class="transfer-main">
           <slot name="from"></slot>
+          <!-- 左侧搜索 -->
           <el-input
             v-if="filter"
             :placeholder="placeholder"
@@ -45,7 +48,11 @@
       <div class="transfer-center">
         <template v-if="button_text">
           <p class="transfer-center-item">
-            <el-button type="primary" @click="addToAims(true)" :disabled="from_disabled">
+            <el-button
+              type="primary"
+              @click="addToAims(true)"
+              :disabled="from_disabled"
+            >
               {{ fromButton || "添加" }}
               <i class="el-icon-arrow-right"></i>
             </el-button>
@@ -56,7 +63,8 @@
               @click="removeToSource"
               :disabled="to_disabled"
               icon="el-icon-arrow-left"
-            >{{ toButton || "移除" }}</el-button>
+              >{{ toButton || "移除" }}</el-button
+            >
           </p>
         </template>
         <template v-else>
@@ -128,7 +136,7 @@
 import { arrayToTree } from "../../utils/array";
 
 export default {
-  name: 'tree-transfer',
+  name: "tree-transfer",
   data() {
     return {
       from_is_indeterminate: false, // 源数据是否半选
@@ -148,8 +156,7 @@ export default {
       filterListThird: "", // 通讯录模式 右3筛选
       archiveFirst: [], // 存档右侧筛选前数据
       archiveSecond: [], // 存档右侧筛选前数据
-      archiveThird: [], // 存档右侧筛选前数据
-
+      archiveThird: [] // 存档右侧筛选前数据
     };
   },
   props: {
@@ -550,14 +557,22 @@ export default {
     },
     // 源树选中事件 - 是否禁用穿梭按钮
     fromTreeChecked(nodeObj, treeObj) {
+      console.log("源树选中事件"+treeObj.checkedNodes);
       this.from_check_keys = treeObj.checkedNodes;
+      //清空右侧树，禁用删除按钮
+      this.$refs["to-tree"].setCheckedKeys([]);
+      this.to_disabled = true;
       this.$nextTick(() => {
         this.$emit("left-check-change", nodeObj, treeObj, this.from_check_all);
       });
     },
     // 目标树选中事件 - 是否禁用穿梭按钮
     toTreeChecked(nodeObj, treeObj) {
+      console.log("源树选中事件"+treeObj.checkedNodes);
       this.to_check_keys = treeObj.checkedNodes;
+      //清空左侧树，禁用添加按钮
+      this.$refs["from-tree"].setCheckedKeys([]);
+      this.from_disabled = true;
       this.$nextTick(() => {
         this.$emit("right-check-change", nodeObj, treeObj, this.to_check_all);
       });
@@ -606,7 +621,7 @@ export default {
       if (!value) return true;
       return data[this.defaultProps.label].indexOf(value) !== -1;
     }
-    
+
     // 以下为提供方法 ----------------------------------------------------------------方法--------------------------------------
   },
   computed: {

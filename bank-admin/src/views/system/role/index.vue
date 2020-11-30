@@ -439,6 +439,7 @@ export default {
     /** 查询菜单树结构 */
     getMenuTreeselect() {
       menuTreeselect().then(response => {
+        console.log(response.data);
         this.fromData = response.data;
       });
     },

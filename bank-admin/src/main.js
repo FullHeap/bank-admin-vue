@@ -28,7 +28,7 @@ Vue.use(ElementUI, {
 import './assets/icons'
 
 //mock测试引入
-//import './mock/mock.js'
+import './mock/mock.js'
 
 //用户权限管理
 import permission from './directive/permission'
