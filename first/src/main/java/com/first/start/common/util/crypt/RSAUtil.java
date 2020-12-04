@@ -29,11 +29,32 @@ import org.apache.commons.codec.binary.Base64;
 /**
  * @ClassName: RSAUtil
  * @Description: RSA加密解密，加签解签工具类
- * @author lyz
+ * @author 忙碌的菠萝
  * @date 2020年11月27日 下午1:19:55
  *
  */
 public class RSAUtil {
+	
+	public static String DEFAULT_PK = 
+			"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDblel5BFNPG+HTSGJgGOBhNsv2\r\n" + 
+			"WOqwU7Dvxuj1A+nU3M3eXTLY/xFU7q9LyxG4yGiR3VvPgjaduiO2WGF2sZECpwf6\r\n" + 
+			"Hjh4aNJSCsukFrkfClZ2CvissHVhxXv/DJfH2AZycBcvcFxKrKbUbU9WH46o8F7K\r\n" + 
+			"AGruU0JkBTDaRAZMgQIDAQAB";
+	public static String DEFAULT_PRIK = 
+			"MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBANuV6XkEU08b4dNI\r\n" + 
+			"YmAY4GE2y/ZY6rBTsO/G6PUD6dTczd5dMtj/EVTur0vLEbjIaJHdW8+CNp26I7ZY\r\n" + 
+			"YXaxkQKnB/oeOHho0lIKy6QWuR8KVnYK+KywdWHFe/8Ml8fYBnJwFy9wXEqsptRt\r\n" + 
+			"T1YfjqjwXsoAau5TQmQFMNpEBkyBAgMBAAECgYAK/Ios6uF8MMnwt0tswXHgi0xT\r\n" + 
+			"LAm5/sX4iTw4nhSB+PY37PPRVZm5ZSPSJ/vgAe7xdWDVlg9Dfv+wbOWbebDmmE8K\r\n" + 
+			"6FLfXFqYjSRDca7Ib9P9LE/voLgml5rMzBaTsK6519WEXjWkxZzIbFac5b2ZIQdr\r\n" + 
+			"T9IzWgxcrGK/Bi66QQJBAPsqV5VMhOy0U7/ATot9+relafQzvnnBwk6ifi7Lheo6\r\n" + 
+			"e510y+XrvKc1y+LtG+T5x2lRxCfebi1xSScMOW2XjnkCQQDfz/SPfzh7uu03OnG7\r\n" + 
+			"dk/DATpIziXUCQKOtY8Bmp7koTeoSnacoTIIIXmAizJ42ESNfPPK2JucHn8h9JTl\r\n" + 
+			"6QxJAkB59oWxKgciKi7A3lFFy1cD9n8M5lOILF5+cMl1T78njl6Yhy67500kpSrs\r\n" + 
+			"dtckyWXb7qih85Ds4CX1oCoC3aWBAkAPS8gcEobKtgDGWIEzXaef3TKdjTE6p478\r\n" + 
+			"L95hLq8TUw1ZvBUVKVMhCSCjr1+4sJcm0FZdE6a26cKokG2otN+5AkEAkFso/cB5\r\n" + 
+			"oJF3cVK2+LuBeeLCtWX6vLUWAFHKzEK3N1tJvp01oEiPw9BbEkVgFm4zvdiYVw0i\r\n" + 
+			"C6FlHaQYqnycpQ==";
 	
 	/* 
 	 * 常见异常对照 
@@ -153,13 +174,11 @@ public class RSAUtil {
 			String outStr = Base64.encodeBase64String(cipher.doFinal(encryptData.getBytes("UTF-8")));
 			return outStr;
 		} catch (NoSuchAlgorithmException e) {
-			e.getClass().getSimpleName();
-			e.printStackTrace();
 			throw new NoSuchAlgorithmException("无此加密算法，请检查环境");
 		} catch (NoSuchPaddingException e) {
 			throw new NoSuchPaddingException("明文数据未找到");
 		} catch (InvalidKeyException e) {
-			throw new InvalidKeyException("加密公钥非法，请检查");
+			throw new InvalidKeyException("加密秘钥非法，请检查");
 		} catch (IllegalBlockSizeException e) {
 			throw new IllegalBlockSizeException("明文长度非法");
 		} catch (BadPaddingException e) {
@@ -205,7 +224,68 @@ public class RSAUtil {
 			throw new Exception("其他错误:", e);
 		}
 	}
+	
+    /**
+    * @Title: encrypt
+    * @Description: 大数据分片加密
+    * @param 
+    * @return String
+    * @throws
+    */
+    public static String encrypt(String encryptData, String publicKey, boolean flag) throws Exception {
+    	try {
+			byte[] decoded = Base64.decodeBase64(publicKey);
+			RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance(RSA)
+					.generatePublic(new X509EncodedKeySpec(decoded));
+			Cipher cipher = Cipher.getInstance(RSA);
+			cipher.init(Cipher.ENCRYPT_MODE, pubKey);
+			int MaxBlockSize = KEY_SIZE / 8;
+	        int len = (MaxBlockSize - 11) / 8;
+	        String[] encryptDatas = splitString(encryptData, len);
+	        StringBuffer outStr = new StringBuffer();
+	        for (String sp : encryptDatas) {
+	        	outStr.append(bcd2Str(cipher.doFinal(sp.getBytes())));
+	        }
+	        return outStr.toString();
+		} catch (NoSuchAlgorithmException e) {
+			throw new NoSuchAlgorithmException("无此加密算法，请检查环境");
+		} catch (NoSuchPaddingException e) {
+			throw new NoSuchPaddingException("明文数据未找到");
+		} catch (InvalidKeyException e) {
+			throw new InvalidKeyException("加密公钥非法，请检查");
+		} catch (IllegalBlockSizeException e) {
+			throw new IllegalBlockSizeException("明文长度非法");
+		} catch (BadPaddingException e) {
+			throw new BadPaddingException("明文数据已损坏");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception("其他错误:", e);
+		}
+        
 
+    }
+
+    /**
+	* @Title: decrypt
+	* @Description: RSA私钥解密
+	* @param privateKey base64编码的私钥
+	* @return String
+	* @throws Exception 解密过程中的异常信息
+	*/
+	public static String decrypt(String decryptData, String privateKey) throws Exception {
+		// 64位解码 加密后的字符串
+		byte[] inputByte = Base64.decodeBase64(decryptData.getBytes("utf-8"));
+		byte[] decoded = Base64.decodeBase64(privateKey);
+		RSAPrivateKey priKey = (RSAPrivateKey) KeyFactory.getInstance(RSA)
+				.generatePrivate(new PKCS8EncodedKeySpec(decoded));
+		Cipher cipher = Cipher.getInstance(RSA);
+		cipher.init(Cipher.DECRYPT_MODE, priKey);
+	
+		String decryptStr = new String(cipher.doFinal(inputByte));
+		return decryptStr;
+	}
+    
+    
 	/**
 	* @Title: decrypt
 	* @Description: RSA私钥解密
@@ -214,6 +294,25 @@ public class RSAUtil {
 	* @throws Exception 解密过程中的异常信息
 	*/
 	public static String decrypt(String decryptData, String privateKey, String encoding) throws Exception {
+		// 64位解码 加密后的字符串
+		byte[] inputByte = Base64.decodeBase64(decryptData.getBytes(encoding));
+		byte[] decoded = Base64.decodeBase64(privateKey);
+		RSAPrivateKey priKey = (RSAPrivateKey) KeyFactory.getInstance(RSA)
+				.generatePrivate(new PKCS8EncodedKeySpec(decoded));
+		Cipher cipher = Cipher.getInstance(RSA);
+		cipher.init(Cipher.DECRYPT_MODE, priKey);
+		String decryptStr = new String(cipher.doFinal(inputByte));
+		return decryptStr;
+	}
+	
+	/**
+	* @Title: decrypt
+	* @Description: RSA私钥解密
+	* @param privateKey base64编码的私钥
+	* @return String
+	* @throws Exception 解密过程中的异常信息
+	*/
+	public static String decrypt(String decryptData, String privateKey, String encoding,boolean flag) throws Exception {
 		// 64位解码 加密后的字符串
 		byte[] inputByte = Base64.decodeBase64(decryptData.getBytes(encoding));
 		byte[] decoded = Base64.decodeBase64(privateKey);
@@ -295,7 +394,7 @@ public class RSAUtil {
 	}
 
 	/**
-	* @Title: doCheck
+	* @Title: verify
 	* @param content   待签名数据
 	* @param sign      签名域
 	* @param publicKey base64后的公钥字符串
@@ -303,7 +402,7 @@ public class RSAUtil {
 	* @return boolean 验签结果
 	* @throws
 	*/
-	public static boolean doCheck(String signData, String sign, String publicKey, String encode) throws Exception {
+	public static boolean verify(String signData, String sign, String publicKey, String encode) throws Exception {
 		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 		byte[] encodedKey = BASE64.decode(publicKey);
 		PublicKey pubKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
@@ -315,7 +414,7 @@ public class RSAUtil {
 	}
 
 	/**
-	* @Title: doCheck
+	* @Title: verify
 	* @Description: RSA验签名检查
 	* @param content   待签名数据
 	* @param sign      签名域
@@ -323,7 +422,7 @@ public class RSAUtil {
 	* @return boolean 验签结果
 	* @throws
 	*/
-	public static boolean doCheck(String content, String sign, String publicKey) throws Exception {
+	public static boolean verify(String content, String sign, String publicKey) throws Exception {
 		KeyFactory keyFactory = KeyFactory.getInstance(RSA);
 		byte[] encodedKey = BASE64.decode(publicKey);
 		if (encodedKey == null) {
@@ -338,4 +437,51 @@ public class RSAUtil {
 		boolean bverify = signature.verify(BASE64.decode(sign));
 		return bverify;
 	}
+	
+    /**
+    * @Title: splitString
+    * @Description: 字符串分片
+    * @param string 源字符串
+    * @param len 单片的长度（keysize/8）
+    * @return String[]
+    * @throws
+    */
+    public static String[] splitString(String string, int len) {
+        int x = string.length() / len;
+        int y = string.length() % len;
+        int z = 0;
+        if (y != 0) {
+            z = 1;
+        }
+        String[] strings = new String[x + z];
+        String str = "";
+        for (int i = 0; i < x + z; i++) {
+            if (i == x + z - 1 && y != 0) {
+                str = string.substring(i * len, i * len + y);
+            } else {
+                str = string.substring(i * len, i * len + len);
+            }
+            strings[i] = str;
+        }
+        return strings;
+    }
+    
+    /**
+    * @Title: bcd2Str
+    * @Description: bcd 转 Str
+    * @param bytes
+    * @return String
+    * @throws
+    */
+    public static String bcd2Str(byte[] bytes) {
+        char temp[] = new char[bytes.length * 2], val;
+        for (int i = 0; i < bytes.length; i++) {
+            val = (char) (((bytes[i] & 0xf0) >> 4) & 0x0f);
+            temp[i * 2] = (char) (val > 9 ? val + 'A' - 10 : val + '0');
+
+            val = (char) (bytes[i] & 0x0f);
+            temp[i * 2 + 1] = (char) (val > 9 ? val + 'A' - 10 : val + '0');
+        }
+        return new String(temp);
+    }
 }
