@@ -1,4 +1,4 @@
-package com.first.start.project.system.model;
+package com.first.start.project.system.entity;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -10,23 +10,21 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.util.FastByteArrayOutputStream;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.first.start.common.util.IdUtils;
 import com.first.start.common.util.VerificationCode;
 import com.first.start.common.util.crypt.BASE64;
 import com.first.start.project.system.model.AjaxResult;
+import com.first.start.project.system.model.LoginBody;
 
 /**
  * 登录验证
  * 
  */
-@CrossOrigin
 @RestController
 public class SysLoginController {
 
@@ -38,10 +36,10 @@ public class SysLoginController {
 	 */
 //	@RequestMapping(path = "/systemLogin", method=RequestMethod.POST)
 	@PostMapping("/systemLogin")
-	public AjaxResult systemLogin(String username, String password, String code) {
+	public AjaxResult systemLogin(@RequestBody LoginBody loginBody) {
 		AjaxResult ajax = AjaxResult.success();
-		String token = IdUtils.randomUUID();
-		ajax.put("token", token);
+		
+		ajax.put("token", loginBody.getUsername()+loginBody.getUuid());
 		return ajax;
 	}
 
@@ -60,6 +58,9 @@ public class SysLoginController {
 			// 转换流信息写出
 			FastByteArrayOutputStream os = new FastByteArrayOutputStream();
 			VerificationCode.output(image, os);
+			String uuid = IdUtils.randomUUID();
+			
+			ajax.put("uuid", uuid);
 			ajax.put("imgBase64", BASE64.encode(os.toByteArray()));
 		} catch (IOException e) {
 			return AjaxResult.error(e.getMessage());
@@ -80,38 +81,43 @@ public class SysLoginController {
 		menu.put("name", "SystemIndex");
 		menu.put("path", "/system");
 		menu.put("component", "system");
-		menu.put("meta","");
-		Map<String, Object> meta = new HashMap<String, Object>();
-
+		
+		Map<String, Object> metaSystem = new HashMap<String, Object>();
+		
+		metaSystem.put("title", "系统管理");
+		metaSystem.put("icon", "el-icon-setting");
+		
+		menu.put("meta",metaSystem);
 		List<Map<String, Object>> children = new ArrayList<Map<String, Object>>();
 
 		Map<String, Object> menuUser = new HashMap<String, Object>();
-		menuUser.put("name", "User");
-		menuUser.put("path", "/user");
-		menuUser.put("hidden", false);
-		menuUser.put("component", "system/user/index");
+		menuUser.put("path", "/system/user");
+		menuUser.put("component", "system/user");
 		Map<String, Object> metaUser = new HashMap<String, Object>();
 		metaUser.put("title", "用户管理");
-		metaUser.put("icon", "user");
+		metaUser.put("icon", "el-icon-user-solid");
 		menuUser.put("meta", metaUser);
 		children.add(menuUser);
 
 		Map<String, Object> menuRole = new HashMap<String, Object>();
-		menuRole.put("name", "Role");
-		menuRole.put("path", "/role");
-		menuRole.put("hidden", false);
-		menuRole.put("component", "system/role/index");
+		menuRole.put("path", "/system/role");
+		menuRole.put("component", "system/role");
 		Map<String, Object> metaRole = new HashMap<String, Object>();
 		metaRole.put("title", "角色管理");
-		metaRole.put("icon", "peoples");
+		metaRole.put("icon", "el-icon-star-on");
 		menuRole.put("meta", metaRole);
 		children.add(menuRole);
+		
+		
+		Map<String, Object> menuHome = new HashMap<String, Object>();
+		menuHome.put("path", "/system/home");
+		menuHome.put("component", "system/home");
+		Map<String, Object> metaHome = new HashMap<String, Object>();
+		metaHome.put("title", "欢迎登录");
+		metaHome.put("icon", "el-icon-star-on");
+		menuHome.put("meta", metaRole);
+		children.add(menuHome);
 
-		Map<String, Object> metaSystem = new HashMap<String, Object>();
-		metaSystem.put("title", "系统管理");
-		metaSystem.put("icon", "system");
-
-		menu.put("meta", metaSystem);
 		menu.put("children", children);
 
 		AjaxResult ajax = AjaxResult.success();

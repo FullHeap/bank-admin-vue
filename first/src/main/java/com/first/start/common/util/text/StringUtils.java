@@ -12,6 +12,7 @@ import java.util.Set;
  * 
  */
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
+	
 	/** 空字符串 */
 	private static final String NULLSTR = "";
 

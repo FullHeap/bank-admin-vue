@@ -1,4 +1,4 @@
-package com.first.start.project.system.model;
+package com.first.start.project.system.entity;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
