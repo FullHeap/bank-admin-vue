@@ -51,16 +51,18 @@ public class SignInterceptor implements HandlerInterceptor {
 		}
 		System.out.println(sb.toString());
 		
-		// 获得签名
-		String sign = request.getHeader("sign");
-		boolean result = RSAUtil.verify(sb.toString(), sign, RSAUtil.DEFAULT_PK);
-		if(!result) {
-			System.out.println(result);
-			System.out.println("签名验证失败");
-		}
+		
 
 		//登录时校验密码
 		if ("/systemLogin".equals(request.getRequestURI())) {
+			// 获得签名
+			String sign = request.getHeader("sign");
+			boolean result = RSAUtil.verify(sb.toString(), sign, RSAUtil.DEFAULT_PK);
+			if(!result) {
+				System.out.println(result);
+				System.out.println("签名验证失败");
+			}
+			
 			String key = RSAUtil.decrypt(request.getHeader("envlop"), RSAUtil.DEFAULT_PRIK, "utf-8",true);
 			System.out.println(key);
 			JSONObject js = JSON.parseObject((sb.toString()));

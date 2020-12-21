@@ -49,6 +49,13 @@ import org.springframework.web.filter.CorsFilter;
 //}
 
 /* spring 过滤器配置模式 */
+/**
+* @ClassName: CrossConfig
+* @Description: 跨域配置
+* @author 忙碌的菠萝
+* @date 2020年12月11日 下午1:59:29
+*
+*/
 @Configuration
 public class CrossConfig {
  
@@ -57,7 +64,8 @@ public class CrossConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost");
+        config.addAllowedOrigin("http://localhost:8080");
+        config.addAllowedOrigin("https://localhost:8443");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);

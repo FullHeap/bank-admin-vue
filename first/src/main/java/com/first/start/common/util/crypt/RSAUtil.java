@@ -8,10 +8,13 @@ import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -40,6 +43,7 @@ public class RSAUtil {
 			"WOqwU7Dvxuj1A+nU3M3eXTLY/xFU7q9LyxG4yGiR3VvPgjaduiO2WGF2sZECpwf6\r\n" + 
 			"Hjh4aNJSCsukFrkfClZ2CvissHVhxXv/DJfH2AZycBcvcFxKrKbUbU9WH46o8F7K\r\n" + 
 			"AGruU0JkBTDaRAZMgQIDAQAB";
+	
 	public static String DEFAULT_PRIK = 
 			"MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBANuV6XkEU08b4dNI\r\n" + 
 			"YmAY4GE2y/ZY6rBTsO/G6PUD6dTczd5dMtj/EVTur0vLEbjIaJHdW8+CNp26I7ZY\r\n" + 
@@ -124,8 +128,52 @@ public class RSAUtil {
 	}
 	
 	/**
+	* @Title: loadPublicKeyByFile
+	* @Description: 从证书文件中获取公钥
+	* @param filepath 证书文件路径
+	* @return PublicKey
+	* @throws
+	*/
+	public static PublicKey loadPublicKeyByFile(String filepath) throws Exception {
+		try {
+			// 通过证书,获取公钥
+			CertificateFactory cf = CertificateFactory.getInstance("X.509");
+			Certificate c = cf.generateCertificate(new FileInputStream(filepath));
+			PublicKey publicKey = c.getPublicKey();
+			return publicKey;
+		} catch (IOException e) {
+			throw new Exception("公钥数据流读取错误");
+		} catch (NullPointerException e) {
+			throw new Exception("公钥输入流为空");
+		}
+	}
+
+	/**
+	* @Title: loadPrivateKeyByFile
+	* @Description: 从keystore文件中获取私钥
+	* @param filepath 文件路径
+	* @param alias 证书别名
+	* @param password 证书密码
+	* @return PrivateKey
+	* @throws
+	*/
+	public static PrivateKey loadPrivateKeyByFile(String filepath, String alias, String password) throws Exception {
+		try {
+			KeyStore ks = KeyStore.getInstance("JKS");
+			ks.load(new FileInputStream(filepath), password.toCharArray());
+
+			PrivateKey privateKey = (PrivateKey) ks.getKey(alias, password.toCharArray());
+			return privateKey;
+		} catch (IOException e) {
+			throw new Exception("私钥数据读取错误");
+		} catch (NullPointerException e) {
+			throw new Exception("私钥输入流为空");
+		}
+	}
+
+	/**
 	* @Title: loadKeyByFile
-	* @Description: 从文件中获取秘钥串
+	* @Description: 从文件中获取秘钥串，文件存储为秘钥字符串
 	* @param fileName 文件路径
 	* @return String 秘钥串
 	* @throws
