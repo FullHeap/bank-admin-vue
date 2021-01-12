@@ -1,0 +1,30 @@
+server:
+  port: 8443
+  http-port: 8080
+  ssl:
+    enabled: true
+    key-alias: tomcat
+    protocol: TLS
+    key-store: classpath:server.keystore
+    key-store-password: 123456
+    key-store-type: JKS
+    
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test
+    username: root
+    password: P@ssw0rd
+    
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: assign-id
+      
+cross:
+  allowed-header: "*"
+  allowed-method: "*"
+  allowed-http-origin: http://localhost:8080
+  allowed-https-origin: https://localhost:8443
+
+  

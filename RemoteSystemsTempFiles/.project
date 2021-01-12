@@ -8,5 +8,6 @@
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.rse.ui.remoteSystemsTempNature</nature>
+		<nature>org.jkiss.dbeaver.DBeaverNature</nature>
 	</natures>
 </projectDescription>

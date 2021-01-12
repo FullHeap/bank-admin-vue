@@ -1,0 +1,32 @@
+{
+	"folders": {},
+	"connections": {
+		"mysql5-176d703e91f-7a4564567da1fff6": {
+			"provider": "mysql",
+			"driver": "mysql5",
+			"name": "MySQL - 120.92.151.50",
+			"save-password": true,
+			"show-system-objects": true,
+			"read-only": false,
+			"configuration": {
+				"host": "120.92.151.50",
+				"port": "3306",
+				"url": "jdbc:mysql://120.92.151.50:3306/",
+				"home": "MySQL Binaries",
+				"type": "dev",
+				"auth-model": "native",
+				"handlers": {}
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false
+		}
+	}
+}
