@@ -19,10 +19,10 @@ public class TestCrypt {
 	public static void testGetKey() {
 		try {
 			RSAPrivateKey RSAPrivateKey = (RSAPrivateKey) RSAUtil.loadPrivateKeyByFile(
-					"E:\\dev\\workspace\\bank-admin-vue\\first\\src\\main\\resources\\server.keystore", "tomcat",
+					"E:\\dev\\workspace\\bank-admin-vue\\first\\src\\main\\resources\\ssl\\fxbank.keystore", "fxbank",
 					"123456");
 			RSAPublicKey RSAPublicKey = (RSAPublicKey) RSAUtil
-					.loadPublicKeyByFile("E:\\dev\\workspace\\bank-admin-vue\\first\\src\\main\\resources\\client.cer");
+					.loadPublicKeyByFile("E:\\dev\\workspace\\bank-admin-vue\\first\\src\\main\\resources\\ssl\\client.cer");
 
 			System.out.println("RSAPrivateKey:\n" + BASE64.encode(RSAPrivateKey.getEncoded()) + "\n");
 			System.out.println("RSAPublicKey:\n" + BASE64.encode(RSAPublicKey.getEncoded()) + "\n");

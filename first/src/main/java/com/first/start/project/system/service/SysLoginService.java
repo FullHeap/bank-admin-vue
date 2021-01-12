@@ -1,27 +1,27 @@
 package com.first.start.project.system.service;
 
-import org.springframework.stereotype.Component;
+import java.util.List;
 
-import com.first.start.project.system.model.LoginBody;
+import org.springframework.stereotype.Service;
 
-/**
- * 登录校验方法
- * 
- */
-@Component
-public class SysLoginService {
+import com.first.start.project.system.entity.SysUser;
+
+@Service
+public interface SysLoginService {
 
 	/**
-	 * 登录验证
+	 * 通过用户名查询用户
 	 * 
-	 * @param username 用户名
-	 * @param password 密码
-	 * @param code     验证码
-	 * @param uuid     唯一标识
-	 * @return 结果
+	 * @param userName 用户名
+	 * @return 用户对象信息
 	 */
-	public String login(LoginBody loginBody) {
-		
-		return "true";
-	}
+	public SysUser selectUserByUserName(String username);
+
+	/**
+	 * 修改密码
+	 */
+	public int updPwd(String username);
+
+	
+	
 }

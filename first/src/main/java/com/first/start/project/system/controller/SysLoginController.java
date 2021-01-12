@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FastByteArrayOutputStream;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import com.first.start.common.util.VerificationCode;
 import com.first.start.common.util.crypt.BASE64;
 import com.first.start.project.system.model.AjaxResult;
 import com.first.start.project.system.model.LoginBody;
+import com.first.start.project.system.service.SysLoginService;
 
 /**
  * 登录验证
@@ -27,6 +29,9 @@ import com.first.start.project.system.model.LoginBody;
  */
 @RestController
 public class SysLoginController {
+	
+	@Autowired
+    private SysLoginService loginService;
 
 	/**
 	 * 登录方法
@@ -40,6 +45,11 @@ public class SysLoginController {
 		AjaxResult ajax = AjaxResult.success();
 		
 		ajax.put("token", loginBody.getUsername()+loginBody.getUuid());
+//		String result = loginService.login(loginBody);
+//		if(!"true".equals(result)) {
+//			ajax= AjaxResult.error("401", "账户信息校验失败");
+//		}
+		
 		return ajax;
 	}
 

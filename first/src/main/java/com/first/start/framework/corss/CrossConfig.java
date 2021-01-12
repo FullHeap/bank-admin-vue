@@ -1,5 +1,7 @@
 package com.first.start.framework.corss;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -57,17 +59,31 @@ import org.springframework.web.filter.CorsFilter;
 *
 */
 @Configuration
+@ConditionalOnProperty(name={"spring.cross.enable"},havingValue = "true")
 public class CrossConfig {
+	
+	@Value("${cross.allowed-header}")
+	private String header;// https的端口
+	
+	@Value("${cross.allowed-method}")
+	private String method;// https的端口
+
+	@Value("${cross.allowed-http-origin}")
+	private String httpOrigin;// http的端口
+	
+	@Value("${cross.allowed-https-origin}")
+	private String httpsOrigin;// http的端口
  
     @Bean
     public FilterRegistrationBean<CorsFilter> corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:8080");
-        config.addAllowedOrigin("https://localhost:8443");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
+        config.addAllowedOrigin(httpOrigin);
+        config.addAllowedOrigin(httpsOrigin);
+        config.addAllowedHeader(header);
+        config.addAllowedMethod(method);
+//        config.setMaxAge(3600);
         source.registerCorsConfiguration("/**", config);
         FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<CorsFilter>(new CorsFilter(source));
         bean.setOrder(0);
